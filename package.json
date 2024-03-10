@@ -16,6 +16,10 @@
       {
         "command": "structured-ladder-import.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "structured-ladder-import.sortImports",
+        "title": "Sort and Ladder Imports"
       }
     ]
   },
