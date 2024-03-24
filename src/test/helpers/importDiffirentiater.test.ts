@@ -1,43 +1,27 @@
 import * as assert from 'assert';
-// import the functions you want to test
-import { diffirentiateImports, checkForLocalImports } from '../../helpers/importFilter';
+import { differentiateImports } from '../../helpers/importFilter';
+import { ImportLengthObject } from '../../type/index.type';
 
 suite('Import differentiation Test Suite', () => {
 
     test('differentiateImports correctly separates local and module imports', () => {
-        const imports = [
-            "import React from 'react';",
-            "import { useState } from 'react';",
-            "import myLocalComponent from './components/MyLocalComponent';",
-            "import anotherLocalComponent from './AnotherLocalComponent';"
+        const imports: ImportLengthObject[] = [
+            { text: "import React from 'react';", length: 28 },
+            { text: "import { useState } from 'react';", length: 34 },
+            { text: "import myLocalComponent from './components/MyLocalComponent';", length: 55 },
+            { text: "import anotherLocalComponent from './AnotherLocalComponent';", length: 56 }
         ];
         
-        const [localImports, moduleImports] = diffirentiateImports(imports);
+        const [localImports, moduleImports] = differentiateImports(imports);
 
         assert.deepStrictEqual(localImports, [
-            "import myLocalComponent from './components/MyLocalComponent';",
-            "import anotherLocalComponent from './AnotherLocalComponent';"
+            { text: "import myLocalComponent from './components/MyLocalComponent';", length: 55 },
+            { text: "import anotherLocalComponent from './AnotherLocalComponent';", length: 56 }
         ]);
 
         assert.deepStrictEqual(moduleImports, [
-            "import React from 'react';",
-            "import { useState } from 'react';"
+            { text: "import React from 'react';", length: 28 },
+            { text: "import { useState } from 'react';", length: 34 }
         ]);
     });
-
-    test('checkForLocalImports correctly identifies local imports', () => {
-        const imports = [
-            "import lodash from 'lodash';",
-            "import myUtil from './utils/myUtil';",
-            "import anotherUtil from '../anotherUtil';"
-        ];
-
-        const localImports = checkForLocalImports(imports);
-
-        assert.deepStrictEqual(localImports, [
-            "import myUtil from './utils/myUtil';",
-            "import anotherUtil from '../anotherUtil';" // Depending on your definition, '../anotherUtil' might also be considered a local import
-        ]);
-    });
-
 });

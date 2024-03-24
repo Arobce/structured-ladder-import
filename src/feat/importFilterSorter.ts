@@ -1,23 +1,27 @@
-import { diffirentiateImports } from "../helpers/importFilter";
+import { differentiateImports, getImportsInAnArray } from "../helpers/importFilter";
 import { sortByLength } from "../helpers/importSorter";
+import { ImportLengthObject } from "../type/index.type";
 
-export const getFilteredSortedImports = (imports: Array<String>) => {
-    const [localImports, moduleImports] = diffirentiateImports(imports);
+export const getFilteredSortedImports = (importsText: string) => {
+    const imports = getImportsInAnArray(importsText);
+
+    const [localImports, moduleImports] = differentiateImports(imports);
 
     const sortedLocalImports = sortByLength(localImports);
     const sortedModuleImports = sortByLength(moduleImports);
 
-    return getCorrectTextFormat(sortedLocalImports, sortedModuleImports);
+    return formatImportsText(sortedLocalImports, sortedModuleImports);
 };
 
-export const getCorrectTextFormat = (sortedLocalImports: Array<String>, sortedModuleImports: Array<String>) => {
-    // Determine if there's only one type of imports to decide on adding a newline
+export const formatImportsText = (sortedLocalImports: ImportLengthObject[], sortedModuleImports: ImportLengthObject[]) => {
+    const localImports = sortedLocalImports.map(importObject => importObject.text);
+	const moduleImports = sortedModuleImports.map(importObject => importObject.text);
+    
     const shouldAddNewline = sortedLocalImports.length > 0 && sortedModuleImports.length > 0;
-
     // Combine the sorted imports with a conditional line gap between them
-    const text = sortedModuleImports.join('\n') +
+    const newImports = moduleImports.join('\n') +
         (shouldAddNewline ? '\n\n' : '') +
-        sortedLocalImports.join('\n');
+        localImports.join('\n');
 
-    return text;
+    return newImports;
 };

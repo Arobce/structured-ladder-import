@@ -1,17 +1,19 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
 import { getFilteredSortedImports } from '../../feat/importFilterSorter';
+import { ImportLengthObject } from '../../type/index.type'; // Adjust the import path as necessary
 
 suite('getFilteredSortedImports Test Suite', () => {
     vscode.window.showInformationMessage('Start all tests for getFilteredSortedImports.');
 
     test('Correctly sorts and differentiates module and local imports', () => {
-        const imports = [
-            "import React from 'react';", // module
-            "import { useState } from 'react';", // module
-            "import MyComponent from './MyComponent';", // local
-            "import AnotherComponent from '../AnotherComponent';" // local
-        ];
+        const importsText = 
+`import React from 'react';
+import { useState } from 'react';
+import MyComponent from './MyComponent';
+import AnotherComponent from '../AnotherComponent';
+`;
+
         const expectedOutput =
             `import React from 'react';
 import { useState } from 'react';
@@ -19,40 +21,42 @@ import { useState } from 'react';
 import MyComponent from './MyComponent';
 import AnotherComponent from '../AnotherComponent';`;
 
-        assert.strictEqual(getFilteredSortedImports(imports), expectedOutput);
+        const result = getFilteredSortedImports(importsText);
+        assert.strictEqual(result, expectedOutput);
     });
 
     test('Handles only module imports correctly', () => {
-        const imports = [
-            "import lodash from 'lodash';", // module
-            "import moment from 'moment';" // module
-        ];
+        const importsText = `import lodash from 'lodashass';
+import moment from 'moment';
+`;
         const expectedOutput =
-            `import lodash from 'lodash';
-import moment from 'moment';`;
+            `import moment from 'moment';
+import lodash from 'lodashass';`;
 
-        assert.strictEqual(getFilteredSortedImports(imports), expectedOutput);
+        const result = getFilteredSortedImports(importsText);
+        assert.strictEqual(result, expectedOutput);
     });
 
     test('Handles only local imports correctly', () => {
-        const imports = [
-            "import LocalFirst from './LocalFirst';", // local
-            "import LocalSecond from './LocalSecond';" // local
-        ];
+        const importsText = 
+        `import LocalSecond from './LocalSecond';
+import LocalFirst from './LocalFirst';`;
+
         const expectedOutput =
             `import LocalFirst from './LocalFirst';
 import LocalSecond from './LocalSecond';`;
 
-        assert.strictEqual(getFilteredSortedImports(imports), expectedOutput);
+        const result = getFilteredSortedImports(importsText);
+        assert.strictEqual(result, expectedOutput);
     });
 
     test('Handles mixed complex imports', () => {
-        const imports = [
-            "import { Button, Alert } from 'react-bootstrap';", // module
-            "import HelperUtil from '../../utils/HelperUtil';", // local
-            "import { useState, useEffect } from 'react';", // module
-            "import CustomComponent from './CustomComponent';" // local
-        ];
+        const importsText = 
+        `import { Button, Alert } from 'react-bootstrap';
+import HelperUtil from '../../utils/HelperUtil';
+import { useState, useEffect } from 'react';
+import CustomComponent from './CustomComponent';`;
+
         const expectedOutput =
             `import { useState, useEffect } from 'react';
 import { Button, Alert } from 'react-bootstrap';
@@ -60,6 +64,33 @@ import { Button, Alert } from 'react-bootstrap';
 import HelperUtil from '../../utils/HelperUtil';
 import CustomComponent from './CustomComponent';`;
 
-        assert.strictEqual(getFilteredSortedImports(imports), expectedOutput);
+        const result = getFilteredSortedImports(importsText);
+        assert.strictEqual(result, expectedOutput);
+    });
+
+
+    test('Handles multiline imports correctly', () => {
+        const importsText = 
+        `import {
+deletePreference,
+updatePreference as updatePreferenceService,
+} from "../services/preferences.service";
+import Pagination from '../components/Pagination.component';
+import LoadingSpinner from '../components/loading.component';
+import { IPreferenceItem } from '../types/preferences.type';
+import { getAllPreference } from '../services/preferences.service';`;
+
+        const expectedOutput =
+            `import {
+deletePreference,
+updatePreference as updatePreferenceService,
+} from "../services/preferences.service";
+import Pagination from '../components/Pagination.component';
+import { IPreferenceItem } from '../types/preferences.type';
+import LoadingSpinner from '../components/loading.component';
+import { getAllPreference } from '../services/preferences.service';`;
+
+        const result = getFilteredSortedImports(importsText);
+        assert.strictEqual(result, expectedOutput);
     });
 });
