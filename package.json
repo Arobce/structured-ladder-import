@@ -2,8 +2,9 @@
   "name": "structured-ladder-import",
   "displayName": "Structure and Ladder Imports",
   "description": "Ladders and divide your imports",
-  "version": "0.0.1",
-  "icon": "images/logo.png",
+  "publisher": "RoshanChapagain",
+  "version": "1.0.0",
+  "icon": "./images/logo.png",
   "engines": {
     "vscode": "^1.87.0"
   },
@@ -23,6 +24,10 @@
         "title": "Ladder Imports: Sort and Ladder Imports"
       }
     ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Arobce/structured-ladder-import.git"
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

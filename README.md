@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="src/images/logo.png" alt="feature X" width="200" height="200"/>
+  <img src="/images/logo.png" alt="feature X" width="200" height="200"/>
 </p>
 
 # structured-ladder-imports README
@@ -16,7 +16,7 @@ This extension optimizes your import statements by:
 Supports multiline import statements for comprehensive organization.
 
 <p align="center">
-  <img src="src/images/demo.gif" alt="Extension Demo"/>
+  <img src="/images/demo.gif" alt="Extension Demo"/>
 </p>
 
 ## Known Issues
