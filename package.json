@@ -3,6 +3,7 @@
   "displayName": "structured-ladder-import",
   "description": "Ladders and divide your imports",
   "version": "0.0.1",
+  "icon": "images/logo.png",
   "engines": {
     "vscode": "^1.87.0"
   },
@@ -19,7 +20,7 @@
       },
       {
         "command": "structured-ladder-import.sortImports",
-        "title": "Sort and Ladder Imports"
+        "title": "Ladder Imports: Sort and Ladder Imports"
       }
     ]
   },
